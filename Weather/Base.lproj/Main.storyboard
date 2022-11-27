@@ -1,24 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Oma-QO-g6B">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Permission Location Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PermissionLocationController" customModule="Weather" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="2085" y="-573"/>
+        </scene>
+        <!--Weather Data Controller-->
+        <scene sceneID="Iko-hu-bSC">
+            <objects>
+                <viewController id="XDA-yd-H4Z" customClass="WeatherDataController" customModule="Weather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ylf-ww-3a1">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="yTM-8f-Pzo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="jXj-YS-Z4l">
+                        <barButtonItem key="leftBarButtonItem" image="server.rack" catalog="system" id="700-XA-oyC">
+                            <connections>
+                                <action selector="settingsButtonTapped:" destination="XDA-yd-H4Z" id="UmR-Xv-NSc"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="location.magnifyingglass" catalog="system" id="Sam-0Q-JCY">
+                            <connections>
+                                <action selector="permissionLocationButtonTapped:" destination="XDA-yd-H4Z" id="5Eo-wP-jNX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="tvj-z7-VTq" kind="show" id="uai-VN-qjx"/>
+                        <segue destination="BYZ-38-t0r" kind="custom" id="n8U-LU-pdS"/>
+                        <segue destination="76l-aq-4V7" kind="show" id="80L-f3-Or5"/>
+                        <segue destination="P44-NA-K3u" kind="show" id="BBQ-te-5Mm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5aA-UC-XXi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1156.4885496183206" y="-6.3380281690140849"/>
+        </scene>
+        <!--Settings Controller-->
+        <scene sceneID="f7B-Le-it0">
+            <objects>
+                <viewController id="tvj-z7-VTq" customClass="SettingsController" customModule="Weather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jsc-Rc-JKa">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Uba-2M-xQe"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="7gv-ld-y5t"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WEX-Eh-yJF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2084.7328244274809" y="158.45070422535213"/>
+        </scene>
+        <!--Extended Weather Data Controller-->
+        <scene sceneID="SWG-1H-iy9">
+            <objects>
+                <viewController id="76l-aq-4V7" customClass="ExtendedWeatherDataController" customModule="Weather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RcG-GJ-hTt">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Xee-Q2-9TD"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="x2g-JJ-IbV"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zgt-F9-uaJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="900" y="968"/>
+        </scene>
+        <!--Certain Day Weather Data Controller-->
+        <scene sceneID="bbx-Wq-fw7">
+            <objects>
+                <viewController id="P44-NA-K3u" customClass="CertainDayWeatherDataController" customModule="Weather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="a27-WO-LI3">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Wx8-LB-DGO"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ema-BZ-BxC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FrE-yw-P8V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1847" y="968"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ozO-in-71j">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Oma-QO-g6B" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pTt-Sh-Bsy">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="XDA-yd-H4Z" kind="relationship" relationship="rootViewController" id="7L8-LV-zu9"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gPE-RH-vrD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="229.7709923664122" y="-6.3380281690140849"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="location.magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="server.rack" catalog="system" width="128" height="93"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
