@@ -1,4 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CityTable" representedClassName="CityTable" syncable="YES" codeGenerationType="class">
+        <attribute name="country" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="sunrise" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sunset" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="cityToGeneral" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GeneralTable" inverseName="generalToCity" inverseEntity="GeneralTable"/>
+        <relationship name="cityToList" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToCity" inverseEntity="ListTable"/>
+    </entity>
+    <entity name="CloudsTable" representedClassName="CloudsTable" syncable="YES" codeGenerationType="class">
+        <attribute name="all" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cloudsID" optional="YES" attributeType="String"/>
+        <relationship name="cloudsToList" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToClouds" inverseEntity="ListTable"/>
+    </entity>
+    <entity name="GeneralTable" representedClassName="GeneralTable" syncable="YES" codeGenerationType="class">
+        <attribute name="cnt" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="generalToCity" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CityTable" inverseName="cityToGeneral" inverseEntity="CityTable"/>
+        <relationship name="generalToList" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToGeneral" inverseEntity="ListTable"/>
+    </entity>
+    <entity name="ListTable" representedClassName="ListTable" syncable="YES" codeGenerationType="class">
+        <attribute name="cityID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cloudsID" optional="YES" attributeType="String"/>
+        <attribute name="dt" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dt_txt" optional="YES" attributeType="String"/>
+        <attribute name="listID" optional="YES" attributeType="String"/>
+        <attribute name="mainID" optional="YES" attributeType="String"/>
+        <attribute name="pop" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="weatherID" optional="YES" attributeType="String"/>
+        <attribute name="windID" optional="YES" attributeType="String"/>
+        <relationship name="listToCity" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CityTable" inverseName="cityToList" inverseEntity="CityTable"/>
+        <relationship name="listToClouds" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CloudsTable" inverseName="cloudsToList" inverseEntity="CloudsTable"/>
+        <relationship name="listToGeneral" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="GeneralTable" inverseName="generalToList" inverseEntity="GeneralTable"/>
+        <relationship name="listToMain" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="MainTable" inverseName="mainToList" inverseEntity="MainTable"/>
+        <relationship name="listToWeather" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="WeatherTable" inverseName="weatherToList" inverseEntity="WeatherTable"/>
+        <relationship name="listToWind" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="WindTable" inverseName="windToList" inverseEntity="WindTable"/>
+    </entity>
+    <entity name="MainTable" representedClassName="MainTable" syncable="YES" codeGenerationType="class">
+        <attribute name="feels_like" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="mainID" optional="YES" attributeType="String"/>
+        <attribute name="pressure" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temp_max" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temp_min" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="mainToList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ListTable" inverseName="listToMain" inverseEntity="ListTable"/>
+    </entity>
+    <entity name="Settings" representedClassName="Settings" syncable="YES" codeGenerationType="class">
+        <attribute name="hours" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="notification" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="temp" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="WeatherTable" representedClassName="WeatherTable" syncable="YES" codeGenerationType="class">
+        <attribute name="des" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="idOfCondition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="main" optional="YES" attributeType="String"/>
+        <attribute name="weatherID" optional="YES" attributeType="String"/>
+        <relationship name="weatherToList" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToWeather" inverseEntity="ListTable"/>
+    </entity>
+    <entity name="WindTable" representedClassName="WindTable" syncable="YES" codeGenerationType="class">
+        <attribute name="deg" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windID" optional="YES" attributeType="String"/>
+        <relationship name="windToList" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToWind" inverseEntity="ListTable"/>
+    </entity>
 </model>

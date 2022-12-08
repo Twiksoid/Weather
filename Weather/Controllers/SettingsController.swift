@@ -6,8 +6,18 @@
 //
 
 import UIKit
+import CoreData
 
 class SettingsController: UIViewController {
+    
+    var coreDataManager = CoreDataManager()
+    
+    private lazy var imageCloud: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "cloud.png")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
     
     private lazy var nameOfGroup: UITextField = {
         let textField = UITextField()
@@ -57,7 +67,7 @@ class SettingsController: UIViewController {
         let x = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         x.insertSegment(withTitle: "Mi", at: 0, animated: false)
         x.insertSegment(withTitle: "Km", at: 1, animated: false)
-        x.selectedSegmentIndex = 0
+        x.selectedSegmentIndex = 1
         x.selectedSegmentTintColor = UIColor.specialBlue
         x.backgroundColor = UIColor.specialGrey
         x.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
@@ -80,7 +90,7 @@ class SettingsController: UIViewController {
         let x = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         x.insertSegment(withTitle: "12", at: 0, animated: false)
         x.insertSegment(withTitle: "24", at: 1, animated: false)
-        x.selectedSegmentIndex = 0
+        x.selectedSegmentIndex = 1
         x.selectedSegmentTintColor = UIColor.specialBlue
         x.backgroundColor = UIColor.specialGrey
         x.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
@@ -100,11 +110,11 @@ class SettingsController: UIViewController {
         return textField
     }()
     
-    let mentionsSegmControl: UISegmentedControl = {
+    let notificationsSegmControl: UISegmentedControl = {
         let x = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         x.insertSegment(withTitle: "On", at: 0, animated: false)
         x.insertSegment(withTitle: "Off", at: 1, animated: false)
-        x.selectedSegmentIndex = 0
+        x.selectedSegmentIndex = 1
         x.selectedSegmentTintColor = UIColor.specialBlue
         x.backgroundColor = UIColor.specialGrey
         x.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
@@ -127,7 +137,14 @@ class SettingsController: UIViewController {
     }()
     
     @objc private func setNewValues(){
-        print("Tapped set")
+        // поскольку отслеживать одну конкретную настройку сложнее, то
+        // решил делать через удаление и создание новой
+        let currentSettings = coreDataManager.settings[0]
+        coreDataManager.setNewSettingsValue(deleteCurrentSettings: currentSettings,
+                                            temp: Int16(tempSegmControl.selectedSegmentIndex),
+                                            speed: Int16(sizeSegmControl.selectedSegmentIndex),
+                                            hours: Int16(timeSegmControl.selectedSegmentIndex),
+                                            notifications: Int16(notificationsSegmControl.selectedSegmentIndex) )
     }
     
     
@@ -142,7 +159,7 @@ class SettingsController: UIViewController {
         tStack.addArrangedSubview(tempSegmControl)
         tStack.addArrangedSubview(sizeSegmControl)
         tStack.addArrangedSubview(timeSegmControl)
-        tStack.addArrangedSubview(mentionsSegmControl)
+        tStack.addArrangedSubview(notificationsSegmControl)
         return tStack
     }()
     
@@ -182,17 +199,38 @@ class SettingsController: UIViewController {
         setupView()
     }
     
+    private func setupCoreData(){
+        
+        // Получаем, что там есть
+        coreDataManager.reloadData()
+        
+        // поскольку в таблице настроек может быть только одна строка, то можно без всяких методов
+        // обращаться напрямую к 0 строке
+        tempSegmControl.selectedSegmentIndex = Int(coreDataManager.settings[0].temp)
+        sizeSegmControl.selectedSegmentIndex = Int(coreDataManager.settings[0].speed)
+        timeSegmControl.selectedSegmentIndex = Int(coreDataManager.settings[0].hours)
+        notificationsSegmControl.selectedSegmentIndex = Int(coreDataManager.settings[0].notification)
+    }
+    
     private func setupView(){
+        
+        setupCoreData()
+        
         view.backgroundColor = UIColor.specialBackGroundBlue
+        view.addSubview(imageCloud)
         view.addSubview(nameOfGroup)
         view.addSubview(stackAll)
         view.addSubview(setNewValuesButton)
         
         NSLayoutConstraint.activate([
             
-            nameOfGroup.bottomAnchor.constraint(equalTo: stackAll.topAnchor, constant: -10),
+            imageCloud.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            imageCloud.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            nameOfGroup.bottomAnchor.constraint(equalTo: stackAll.topAnchor, constant: -20),
             nameOfGroup.leadingAnchor.constraint(equalTo: stackAll.leadingAnchor),
             
+            stackAll.topAnchor.constraint(equalTo: nameOfGroup.bottomAnchor, constant: 10),
             stackAll.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stackAll.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
