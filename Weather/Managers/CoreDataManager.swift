@@ -23,12 +23,43 @@ class CoreDataManager {
     var weather = [WeatherTable]()
     var wind = [WindTable]()
     var city = [CityTable]()
+    //var data: [AllWeatherData?]
     
     func reloadData(){
         let request = Settings.fetchRequest()
         let setting = (try? persistentContainer.viewContext.fetch(request)) ?? []
         self.settings = setting
     }
+    
+    func getFavoriteCities(){
+        let request = CityTable.fetchRequest()
+        let cities = (try? persistentContainer.viewContext.fetch(request))
+        self.city = cities ?? []
+    }
+    
+//    func getDataForCities(){
+//        getFavoriteCities()
+//        
+//        for i in 0...city.count-1 {
+//           let cityID = city[i].id
+//            
+//            let request = ListTable.fetchRequest()
+//            request.predicate = NSPredicate(format: "cityID = %@", cityID)
+//            let list = (try? persistentContainer.viewContext.fetch(request)) ?? []
+//            
+//            for i in 0...list.count-1 {
+//                
+//            }
+//            
+//            if list.contains(where: {$0.cityID == cityID}) {
+//                
+//                let weatherForCity: AllWeatherData = .init(minMaxWeather:  , currentWeatherValue: <#T##String#>, descriptionWeather: <#T##String#>, timeRise: <#T##String#>, timeSunset: <#T##String#>, generalWeatherInfo: <#T##String#>, imageVisible: <#T##UIImage#>, valueVisible: <#T##String#>, imageRain: <#T##UIImage#>, valueRain: <#T##String#>, imageWind: <#T##UIImage#>, valueWind: <#T##String#>, textTimeWeather: <#T##String#>, imageCollectionView: <#T##UIImage#>, textWeather: <#T##String#>, dataWeather: <#T##String#>, imageWeather: <#T##UIImage#>, vetPercent: <#T##String#>, extraTextWeather: <#T##String#>, degreesseData: <#T##String#>)
+//            }
+//        }
+//        
+//        data.append(<#T##newElement: AllWeatherData?##AllWeatherData?#>)
+//        
+//    }
     
     // проверим наличие данных в таблицах
     func checkData(){

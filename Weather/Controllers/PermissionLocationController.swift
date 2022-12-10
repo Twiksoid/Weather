@@ -83,6 +83,7 @@ class PermissionLocationController: UIViewController {
     private lazy var denyButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.denyButtonText, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15)
         button.backgroundColor = UIColor.specialOrangeButton
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +99,13 @@ class PermissionLocationController: UIViewController {
     
     private func firstLoginWas(){
         UserDefaults.standard.set("firstLogin", forKey: "onboarding")
-        performSegue(withIdentifier: "onboardToMain", sender: self)
+
+        // тут вызываем экран создания записи
+        let viewNameToGo = PageViewController()
+        let goTo = UINavigationController(rootViewController: viewNameToGo)
+        goTo.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(goTo, animated: true)
+        
         UserDefaults.standard.synchronize()
     }
     

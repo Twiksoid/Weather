@@ -213,7 +213,9 @@ class SettingsController: UIViewController {
     }
     
     private func setupView(){
-        
+        navigationController?.navigationBar.barTintColor = .specialBlue
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.backgroundColor = .specialBlue
         setupCoreData()
         
         view.backgroundColor = UIColor.specialBackGroundBlue

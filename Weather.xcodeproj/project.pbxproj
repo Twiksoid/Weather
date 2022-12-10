@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D055D32294348E0009FEEA8 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D055D31294348E0009FEEA8 /* InitViewController.swift */; };
 		1D17668D293FBD7A0078ADE1 /* HelperForModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D17668C293FBD7A0078ADE1 /* HelperForModel.swift */; };
 		1D5D673B2934DE70006E1302 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5D673A2934DE70006E1302 /* CoreDataManager.swift */; };
 		1D5D673D2935ECD2006E1302 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5D673C2935ECD2006E1302 /* LocationManager.swift */; };
@@ -19,7 +20,6 @@
 		1D9D6F062933698F006F3DA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9D6F052933698F006F3DA5 /* AppDelegate.swift */; };
 		1D9D6F082933698F006F3DA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9D6F072933698F006F3DA5 /* SceneDelegate.swift */; };
 		1D9D6F0A2933698F006F3DA5 /* PermissionLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9D6F092933698F006F3DA5 /* PermissionLocationController.swift */; };
-		1D9D6F0D2933698F006F3DA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D9D6F0B2933698F006F3DA5 /* Main.storyboard */; };
 		1D9D6F102933698F006F3DA5 /* Weather.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1D9D6F0E2933698F006F3DA5 /* Weather.xcdatamodeld */; };
 		1D9D6F1229336990006F3DA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D9D6F1129336990006F3DA5 /* Assets.xcassets */; };
 		1D9D6F1529336990006F3DA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D9D6F1329336990006F3DA5 /* LaunchScreen.storyboard */; };
@@ -32,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D055D31294348E0009FEEA8 /* InitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
 		1D17668C293FBD7A0078ADE1 /* HelperForModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HelperForModel.swift; path = Weather/Controllers/HelperForModel.swift; sourceTree = SOURCE_ROOT; };
 		1D5D673A2934DE70006E1302 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = Weather/Managers/CoreDataManager.swift; sourceTree = SOURCE_ROOT; };
 		1D5D673C2935ECD2006E1302 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -45,7 +46,6 @@
 		1D9D6F052933698F006F3DA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1D9D6F072933698F006F3DA5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1D9D6F092933698F006F3DA5 /* PermissionLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLocationController.swift; sourceTree = "<group>"; };
-		1D9D6F0C2933698F006F3DA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1D9D6F0F2933698F006F3DA5 /* Weather.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Weather.xcdatamodel; sourceTree = "<group>"; };
 		1D9D6F1129336990006F3DA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D9D6F1429336990006F3DA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -112,7 +112,6 @@
 			children = (
 				1D9D6F2929337787006F3DA5 /* Model */,
 				1D9D6F2829337778006F3DA5 /* Controllers */,
-				1D9D6F0B2933698F006F3DA5 /* Main.storyboard */,
 				1D5D6746293E5AD0006E1302 /* Managers */,
 				1DD6FEF72940FF4700733673 /* Cells */,
 				1D5D6747293E5AF4006E1302 /* Extensions */,
@@ -127,6 +126,7 @@
 		1D9D6F2829337778006F3DA5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1D055D31294348E0009FEEA8 /* InitViewController.swift */,
 				1D5D673E2935F7A7006E1302 /* UIPageViewController.swift */,
 				1D9D6F092933698F006F3DA5 /* PermissionLocationController.swift */,
 				1D9D6F222933735E006F3DA5 /* CertainDayWeatherDataController.swift */,
@@ -215,7 +215,6 @@
 			files = (
 				1D9D6F1529336990006F3DA5 /* LaunchScreen.storyboard in Resources */,
 				1D9D6F1229336990006F3DA5 /* Assets.xcassets in Resources */,
-				1D9D6F0D2933698F006F3DA5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +227,7 @@
 			files = (
 				1D9D6F102933698F006F3DA5 /* Weather.xcdatamodeld in Sources */,
 				1D5D6749293F45CF006E1302 /* MiniWeatherCollectionViewCell.swift in Sources */,
+				1D055D32294348E0009FEEA8 /* InitViewController.swift in Sources */,
 				1D5D674D293F7111006E1302 /* HeaderCollectionViewCell.swift in Sources */,
 				1D17668D293FBD7A0078ADE1 /* HelperForModel.swift in Sources */,
 				1D9D6F1D293371F0006F3DA5 /* SettingsController.swift in Sources */,
@@ -251,14 +251,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1D9D6F0B2933698F006F3DA5 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1D9D6F0C2933698F006F3DA5 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1D9D6F1329336990006F3DA5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -395,9 +387,11 @@
 				DEVELOPMENT_TEAM = 65B98VTA2W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Weather/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Для определения местоположения необходимо предоставить доступ";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Для определения местоположения необходимо предоставить доступ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Для определения местоположения необходимо предоставить доступ";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -427,9 +421,11 @@
 				DEVELOPMENT_TEAM = 65B98VTA2W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Weather/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Для определения местоположения необходимо предоставить доступ";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Для определения местоположения необходимо предоставить доступ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Для определения местоположения необходимо предоставить доступ";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

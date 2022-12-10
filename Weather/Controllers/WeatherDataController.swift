@@ -10,6 +10,12 @@ import CoreLocation
 
 class WeatherDataController: UIViewController {
     
+    weak var pageMainSceneDelegate: PageViewController?
+    
+    func reloadData(){
+        self.imagePlusButton.isHidden = true
+    }
+    
     var allWeatherData: AllWeatherData?
     //    var header: HeaderData?
     //    var mini: MiniData?
@@ -17,6 +23,7 @@ class WeatherDataController: UIViewController {
     var addressOfCity: String?
     var latitude: CLLocationDegrees?
     var longitude: CLLocationDegrees?
+    var isInit: Bool?
     
     private lazy var imagePlusButton: UIButton = {
         let image = UIButton()
@@ -27,7 +34,15 @@ class WeatherDataController: UIViewController {
     }()
     
     @objc private func imageTapped(){
-        permissionLocationButtonTapped((Any).self)
+
+        let alert = UIAlertController(title: "Внимание!",
+                                      message: "Для добавления города, нажмите в правом верхнем углу",
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Понятно",
+                                     style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+        
     }
     
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -53,10 +68,11 @@ class WeatherDataController: UIViewController {
         return collection
     }()
     
-    init(allweatherData: AllWeatherData,
+    init(allweatherData: AllWeatherData? = nil,
          addressOfCity: String? = nil,
          latitude: CLLocationDegrees? = nil,
-         longitude: CLLocationDegrees? = nil
+         longitude: CLLocationDegrees? = nil,
+         isInit: Bool? = nil
          // , imagePlusButton: UIButton? = nil
          // , layout: UICollectionViewFlowLayout? = nil,
          // collectionView: UICollectionView? = nil) {
@@ -72,24 +88,22 @@ class WeatherDataController: UIViewController {
         //        self.header = weatherHeder
         //        self.mini = weatherMini
         //        self.text = weatherText
+        self.isInit = isInit
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+//        required init?(coder: NSCoder) {
+//            fatalError("init(coder:) has not been implemented")
+//        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "server.rack"),
-                                                            style: .done,
-                                                            target: self,
-                                                            action: nil)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "location.magnifyingglass"),
-                                                           style: .done,
-                                                           target: self,
-                                                           action: nil)
-        if CoreDataManager.shared.city.count == 0 {
+
+        if CoreDataManager.shared.city.count == 0 && isInit == true {
+            collectionView.isHidden = true
             view.addSubview(imagePlusButton)
             
             NSLayoutConstraint.activate([
@@ -125,6 +139,50 @@ class WeatherDataController: UIViewController {
         ])
     }
     
+//  private func setupNavigationBar(){
+//        navigationItem.title = "Test weather data"
+//        navigationController?.navigationBar.backgroundColor = .systemBackground
+//        navigationController?.navigationBar.prefersLargeTitles = false
+//
+//        // создаю новый объект в верхнем баре
+//        let settings = UIBarButtonItem(image: UIImage(systemName: "server.rack"),
+//                                       style: .plain,
+//                                       target: self,
+//                                       action: #selector(settingsTapped))
+//        let newTown = UIBarButtonItem(image: UIImage(systemName: "location.magnifyingglass"),
+//                                      style: .plain,
+//                                      target: self,
+//                                      action: #selector(newTownTapped))
+//
+//        // добавляю его в доступные к выводу справа и слева
+//        navigationItem.rightBarButtonItems = [newTown]
+//        navigationItem.leftBarButtonItems = [settings]
+//    }
+//
+//    @objc private func settingsTapped() {
+//        navigationController?.pushViewController(SettingsController(), animated: true)
+//    }
+//    @objc private func newTownTapped() {
+//        // тут нужно уже не локацию спрашивать, а алерт показывать
+//        // чтобы из этого алерта захватить город и передать его в модель
+//        TextPicker.defaultPicker.getText(in: self) { text in
+//            self.addressOfCity = text
+//            if self.addressOfCity != "" || self.addressOfCity != nil {
+//                LocationManager.shared.forwardGeocoding(address: self.addressOfCity!) { data in
+//                    self.latitude = data.latitude
+//                    self.longitude = data.longitude
+//
+//                    print(self.addressOfCity!)
+//                    print(self.latitude!)
+//                    print(self.longitude!)
+//
+//                    self.getDataLocationFor(lat: self.latitude!, lot: self.longitude!)
+//                } } else {
+//                    print("nil field")
+//                }
+//        }
+//    }
+    
     private func getDataLocationFor(lat: CLLocationDegrees, lot: CLLocationDegrees){
         
         let tempValueFromSettings = CoreDataManager.shared.settings[0].temp
@@ -139,38 +197,13 @@ class WeatherDataController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.imagePlusButton.isHidden = true
+                    self.collectionView.isHidden = false
                 }
                 
             } else {
                 print("нил вернулся вместо ответа")
             }
         }
-    }
-    
-    @IBAction func permissionLocationButtonTapped(_ sender: Any) {
-        // тут нужно уже не локацию спрашивать, а алерт показывать
-        // чтобы из этого алерта захватить город и передать его в модель
-        TextPicker.defaultPicker.getText(in: self) { text in
-            self.addressOfCity = text
-            if self.addressOfCity != "" || self.addressOfCity != nil {
-                LocationManager.shared.forwardGeocoding(address: self.addressOfCity!) { data in
-                    self.latitude = data.latitude
-                    self.longitude = data.longitude
-                    
-                    print(self.addressOfCity!)
-                    print(self.latitude!)
-                    print(self.longitude!)
-                    
-                    self.getDataLocationFor(lat: self.latitude!, lot: self.longitude!)
-                } } else {
-                    print("nil field")
-                }
-        }
-    }
-    
-    @IBAction func settingsButtonTapped(_ sender: Any) {
-        print("Tapped settings")
-        navigationController?.pushViewController(SettingsController(), animated: true)
     }
 }
 
@@ -182,11 +215,9 @@ extension WeatherDataController:  UICollectionViewDataSource, UICollectionViewDe
     // секция 1, шапка
     // секция 2, мини прогноз
     // секция 3, деталка
-    // средние значения: для айофна 5 вместится, для айпада 11
+    // средние значения: для айфона 5 вместится, для айпада 11
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {return 1} else if section == 1 {
-            return Int((collectionView.frame.width - 50 ) / 60)
-        }  else { return 19 }
+        if section == 0 {return 1} else if section == 1 {return Int((collectionView.frame.width - 50 ) / 60)}  else { return 19 }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

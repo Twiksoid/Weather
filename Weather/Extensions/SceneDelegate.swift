@@ -16,23 +16,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
+//
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        var viewControllerForShowing: UIViewController
+//
+//        if (UserDefaults.standard.value(forKey: "onboarding") as? String) == nil {
+//            viewControllerForShowing = PermissionLocationController()
+//            // storyboard.instantiateViewController(withIdentifier: "onboardingStoryboard")
+//        } else {
+//            viewControllerForShowing = InitViewController()
+//            // storyboard.instantiateViewController(withIdentifier: "navigationVCSID")
+//
+//           // PageViewController()
+//            // storyboard.instantiateInitialViewController()!
+//        }
+//
+//       // self.window?.rootViewController = viewControllerForShowing
+//        self.window?.rootViewController = InitViewController()
+//        //  self.window?.rootViewController = PageViewController()
+//        self.window?.makeKeyAndVisible()
+//
+     
+        self.window?.rootViewController = InitViewController()
+                self.window?.makeKeyAndVisible()
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var viewControllerForShowing: UIViewController
-        
-        if (UserDefaults.standard.value(forKey: "onboarding") as? String) == nil {
-            viewControllerForShowing = storyboard.instantiateViewController(withIdentifier: "onboardingStoryboard")
-        } else {
-            viewControllerForShowing =
-            // storyboard.instantiateViewController(withIdentifier: "navigationVCSID")
-            
-            PageViewController()
-            // storyboard.instantiateInitialViewController()!
-        }
-        
-        self.window?.rootViewController = viewControllerForShowing
-        //  self.window?.rootViewController = PageViewController()
-        self.window?.makeKeyAndVisible()
         
         if CoreDataManager.shared.settings.count == 0 {
             // значит, первый запуск, нужно положить данные с базовыми настройками
