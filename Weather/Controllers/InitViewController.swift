@@ -27,12 +27,9 @@ class InitViewController: UINavigationController {
         NetworkManager().downloadData(urlString: urlForCertainTown) { answer in
             if answer != nil {
                 CoreDataManager.shared.saveNewWeatherDatas(weatherData: answer!)
-                
                 DispatchQueue.main.async {
                     self.makeRootController()
                 }
-                
-                // self.makeRootController()
             } else {
                 print("нил вернулся вместо ответа")
             }

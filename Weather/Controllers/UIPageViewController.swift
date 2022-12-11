@@ -23,22 +23,6 @@ class PageViewController: UIPageViewController {
         navigationController?.navigationBar.backgroundColor = .white
     }
     
-    //    func getDataForCities(){
-    //    // После этого нужно загрузить новые данные для этих городов
-    //    let cities = CoreDataManager.shared.city
-    //    if cities.count > 0 {
-    //        for i in 0...cities.count-1 {
-    //            print("текущий город - ",cities[i].name!)
-    //            latitude = cities[i].lat
-    //            longitude = cities[i].lon
-    //            
-    //            if (self.latitude != nil) && (self.longitude != nil) {
-    //                    getDataLocationFor(lat: self.latitude!, lot: self.longitude!)
-    //                } else {
-    //                print("город не распознали, данные не загрузили")}
-    //            }
-    //    }}
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // нужно сходить в сеть

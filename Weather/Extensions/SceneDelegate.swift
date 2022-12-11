@@ -42,19 +42,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // таблицу городов не проверяем тк там храним как раз все нужные города
         // что уже добавил пользователь
         CoreDataManager.shared.checkData()
-        //       let listData = CoreDataManager.shared.list
-        //        if listData.count > 0  {
-        //            let weather = CoreDataManager.shared.weather
-        //            let main = CoreDataManager.shared.main
-        //            let wind = CoreDataManager.shared.wind
-        //            let cloud = CoreDataManager.shared.cloud
-        //            let general = CoreDataManager.shared.general
-        //            CoreDataManager.shared.deleteAllData(list: listData,
-        //                                                 weather: weather,
-        //                                                 main: main,
-        //                                                 wind: wind,
-        //                                                 cloud: cloud,
-        //                                                 general: general)
         if CoreDataManager.shared.general.count > 0 {
             CoreDataManager.shared.deleteAllData(general: CoreDataManager.shared.general)
         }
