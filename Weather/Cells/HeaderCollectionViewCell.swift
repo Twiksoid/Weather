@@ -74,6 +74,7 @@ class HeaderCollectionViewCell: UICollectionViewCell {
         let text = UILabel()
         //text.textColor = .specialGold
         text.textAlignment = .center
+        text.numberOfLines = 0
         text.isUserInteractionEnabled = false
         text.translatesAutoresizingMaskIntoConstraints = false
         return text

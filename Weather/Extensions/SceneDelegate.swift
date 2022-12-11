@@ -16,32 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
+        CoreDataManager.shared.checkData()
+        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-        //
-        //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        //        var viewControllerForShowing: UIViewController
-        //
-        //        if (UserDefaults.standard.value(forKey: "onboarding") as? String) == nil {
-        //            viewControllerForShowing = PermissionLocationController()
-        //            // storyboard.instantiateViewController(withIdentifier: "onboardingStoryboard")
-        //        } else {
-        //            viewControllerForShowing = InitViewController()
-        //            // storyboard.instantiateViewController(withIdentifier: "navigationVCSID")
-        //
-        //           // PageViewController()
-        //            // storyboard.instantiateInitialViewController()!
-        //        }
-        //
-        //       // self.window?.rootViewController = viewControllerForShowing
-        //        self.window?.rootViewController = InitViewController()
-        //        //  self.window?.rootViewController = PageViewController()
-        //        self.window?.makeKeyAndVisible()
-        //
-        
         self.window?.rootViewController = InitViewController()
         self.window?.makeKeyAndVisible()
-        
         
         if CoreDataManager.shared.settings.count == 0 {
             // значит, первый запуск, нужно положить данные с базовыми настройками
@@ -62,21 +42,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // таблицу городов не проверяем тк там храним как раз все нужные города
         // что уже добавил пользователь
         CoreDataManager.shared.checkData()
-        let listData = CoreDataManager.shared.list
-        if listData.count > 0 {
-            let weather = CoreDataManager.shared.weather
-            let main = CoreDataManager.shared.main
-            let wind = CoreDataManager.shared.wind
-            let cloud = CoreDataManager.shared.cloud
-            CoreDataManager.shared.deleteAllData(list: listData,
-                                                 weather: weather,
-                                                 main: main,
-                                                 wind: wind,
-                                                 cloud: cloud)
+        //       let listData = CoreDataManager.shared.list
+        //        if listData.count > 0  {
+        //            let weather = CoreDataManager.shared.weather
+        //            let main = CoreDataManager.shared.main
+        //            let wind = CoreDataManager.shared.wind
+        //            let cloud = CoreDataManager.shared.cloud
+        //            let general = CoreDataManager.shared.general
+        //            CoreDataManager.shared.deleteAllData(list: listData,
+        //                                                 weather: weather,
+        //                                                 main: main,
+        //                                                 wind: wind,
+        //                                                 cloud: cloud,
+        //                                                 general: general)
+        if CoreDataManager.shared.general.count > 0 {
+            CoreDataManager.shared.deleteAllData(general: CoreDataManager.shared.general)
         }
-            // путь папки на устройстве -
-            print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
-        }
+        
+        // путь папки на устройстве -
+        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+    }
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

@@ -3,6 +3,8 @@
     <entity name="CityTable" representedClassName="CityTable" syncable="YES" codeGenerationType="class">
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="sunrise" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="sunset" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -15,7 +17,24 @@
         <relationship name="cloudsToList" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToClouds" inverseEntity="ListTable"/>
     </entity>
     <entity name="GeneralTable" representedClassName="GeneralTable" syncable="YES" codeGenerationType="class">
+        <attribute name="all" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cityID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cityName" optional="YES" attributeType="String"/>
         <attribute name="cnt" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="deg" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="descW" optional="YES" attributeType="String"/>
+        <attribute name="dt" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dt_text" optional="YES" attributeType="String"/>
+        <attribute name="feels_like" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="main" optional="YES" attributeType="String"/>
+        <attribute name="pop" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temp_max" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temp_min" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="generalToCity" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CityTable" inverseName="cityToGeneral" inverseEntity="CityTable"/>
         <relationship name="generalToList" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ListTable" inverseName="listToGeneral" inverseEntity="ListTable"/>
     </entity>

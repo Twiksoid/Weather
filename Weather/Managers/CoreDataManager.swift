@@ -23,6 +23,7 @@ class CoreDataManager {
     var weather = [WeatherTable]()
     var wind = [WindTable]()
     var city = [CityTable]()
+    var general = [GeneralTable]()
     //var data: [AllWeatherData?]
     
     func checkSettings(){
@@ -41,25 +42,110 @@ class CoreDataManager {
         self.city = cities ?? []
     }
     
-    func getDataForCities(){
+    
+    func getDataForCities() -> [AllWeatherData] {
         getFavoriteCities()
         
+        var arrayOfWeatherData = [AllWeatherData]()
+        
+        let currentDay = Date()
+        let fortatter = DateFormatter()
+        fortatter.timeStyle = .short
+        fortatter.dateStyle = .full
+        
+        let currentDateTime = fortatter.string(from: currentDay)
+        
         if city.count > 0 {
+            
             for i in 0...city.count-1 {
-                let cityID = city[i].id
+                let cityObject = city[i]
                 
-                let request = ListTable.fetchRequest()
-                let predicateCityID = NSPredicate(format: "cityID = %@", String(cityID))
+                let requstGeneralTable = GeneralTable.fetchRequest()
+                let predicateCityID = NSPredicate(format: "cityID = %@", String(cityObject.id))
                 let currentTime = Int32(Date().timeIntervalSince1970)
                 let predicateCityTime = NSPredicate(format: "dt > %@", String(currentTime))
                 let allPredicates = NSCompoundPredicate(type: .and, subpredicates: [predicateCityID, predicateCityTime])
-                  request.predicate = allPredicates
+                requstGeneralTable.predicate = allPredicates
                 
-                let list = (try? persistentContainer.viewContext.fetch(request)) ?? []
-                print("Количество записей в листе - ", list.count)
-                print(currentTime)
+                var generalWeatherData = (try? persistentContainer.viewContext.fetch(requstGeneralTable)) ?? []
                 
-            }}}
+                // сортируем даты от меньшего к большему
+                generalWeatherData.sort { $0.dt < $1.dt }
+                
+                for i in 0...generalWeatherData.count-1 {
+                    
+                    let timeForPrediction = getTime(forValue: generalWeatherData[i].dt)
+                    let DateForPrediction = getData(forValue: generalWeatherData[i].dt)
+                    
+                    let data = AllWeatherData(
+                        cityID: generalWeatherData[i].cityID,
+                        cityName: generalWeatherData[i].cityName!,
+                        minMaxWeather: "\(String(Int(generalWeatherData[i].temp_min)))º / \(String(Int(generalWeatherData[i].temp_max)))º" ,
+                        currentWeatherValue: String(Int(generalWeatherData[i].temp)) + "º",
+                        descriptionWeather: String(generalWeatherData[i].descW ?? ""),
+                        timeRise: getTime(forValue: cityObject.sunset),
+                        timeSunset: getTime(forValue: cityObject.sunrise),
+                        generalWeatherInfo: currentDateTime,
+                        imageVisible: UIImage(systemName: "smoke")!,
+                        valueVisible: String(Int(generalWeatherData[i].pop)) + "%",
+                        imageRain: UIImage(systemName: "cloud.rain")!,
+                        valueRain: "0%",
+                        imageWind: UIImage(systemName: "wind")!,
+                        valueWind: String(Int(generalWeatherData[i].speed)) + "м/с",
+                        textTimeWeather: timeForPrediction,
+                        imageCollectionView: UIImage(named: String(generalWeatherData[i].icon!))!,
+                        textWeather: String(Int(generalWeatherData[i].temp)) + "º",
+                        dataWeather: DateForPrediction,
+                        imageWeather: UIImage(named: String(generalWeatherData[i].icon!))!,
+                        vetPercent: String(Int(generalWeatherData[i].humidity)) + "%",
+                        extraTextWeather: String(generalWeatherData[i].descW ?? ""),
+                        degreesseData: "\(String(Int(generalWeatherData[i].temp_min)))º- \(String(Int(generalWeatherData[i].temp_max)))º")
+                    
+                    arrayOfWeatherData.append(data)
+                }}}
+        return arrayOfWeatherData
+    }
+    
+    private func getTime(forValue: Int32) -> String {
+        let timeForPrediction = Date(timeIntervalSince1970: TimeInterval(forValue))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = DateFormatter.Style.short
+        dateFormatter.dateStyle = DateFormatter.Style.none
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: timeForPrediction)
+    }
+    
+    private func getData(forValue: Int32) -> String{
+        let DateForPrediction = Date(timeIntervalSince1970: TimeInterval(forValue))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = DateFormatter.Style.none
+        dateFormatter.dateStyle = DateFormatter.Style.short
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: DateForPrediction)
+    }
+    
+    //                let request = ListTable.fetchRequest()
+    //                let predicateCityID = NSPredicate(format: "cityID = %@", String(cityID))
+    //                let currentTime = Int32(Date().timeIntervalSince1970)
+    //                let predicateCityTime = NSPredicate(format: "dt > %@", String(currentTime))
+    //                let allPredicates = NSCompoundPredicate(type: .and, subpredicates: [predicateCityID, predicateCityTime])
+    //                  request.predicate = allPredicates
+    
+    //              let list = (try? persistentContainer.viewContext.fetch(request)) ?? []
+    //
+    //                for i in 0...list.count-1 {
+    //
+    //                    let requestCloud = CloudsTable.fetchRequest()
+    //                    let predicateCloudID = NSPredicate(format: "cloudsID = %@", list[i].cloudsID!)
+    //                    request.predicate = predicateCityID
+    //
+    //                    let clouds = (try? persistentContainer.viewContext.fetch(requestCloud)) ?? []
+    //                }
+    //
+    //                print("Количество записей в листе - ", list.count)
+    //                print("Текущее время UNIX - ", currentTime)
+    
+    //            }}}
     
     // проверим наличие данных в таблицах
     func checkData(){
@@ -86,6 +172,12 @@ class CoreDataManager {
         let requestForCity = CityTable.fetchRequest()
         let city = (try? persistentContainer.viewContext.fetch(requestForCity))
         self.city = city ?? []
+        
+        let requestForGeneral = GeneralTable.fetchRequest()
+        let general = (try? persistentContainer.viewContext.fetch(requestForGeneral))
+        self.general = general ?? []
+        
+        saveContext()
     }
     
     func createSettings(temp: Int16, speed: Int16, hours: Int16, notifications: Int16){
@@ -145,105 +237,151 @@ class CoreDataManager {
         //            }
         //        }
         
-        // нужно сохранить отдельно данные по городу
-        persistentContainer.performBackgroundTask { contexBackgroundWeather in
-            let weatherDataForCity = CityTable(context: contexBackgroundWeather)
+        DispatchQueue.main.async {
             
-            if CoreDataManager.shared.city.contains(where: { $0.name == weatherData.city.name }) {
-                print("Такой город уже есть, не добавляем")
-            } else {
-                weatherDataForCity.id = weatherData.city.id
-                weatherDataForCity.name = weatherData.city.name
-                weatherDataForCity.country = weatherData.city.country
-                weatherDataForCity.sunrise = weatherData.city.sunrise
-                weatherDataForCity.sunset = weatherData.city.sunset
+            // нужно сохранить отдельно данные по городу
+            self.persistentContainer.performBackgroundTask { contexBackgroundWeather in
+                let weatherDataForCity = CityTable(context: contexBackgroundWeather)
                 
-                try? contexBackgroundWeather.save()
-                DispatchQueue.main.async {
-                    self.reloadData()
+                if CoreDataManager.shared.city.contains(where: { $0.name == weatherData.city.name }) {
+                    print("Такой город уже есть, не добавляем")
+                } else {
+                    weatherDataForCity.id = weatherData.city.id
+                    weatherDataForCity.name = weatherData.city.name
+                    weatherDataForCity.country = weatherData.city.country
+                    weatherDataForCity.sunrise = weatherData.city.sunrise
+                    weatherDataForCity.sunset = weatherData.city.sunset
+                    weatherDataForCity.lat = weatherData.city.coord.lat
+                    weatherDataForCity.lon = weatherData.city.coord.lon
+                    
+                    try? contexBackgroundWeather.save()
+                    DispatchQueue.main.async {
+                        self.reloadData()
+                    }
                 }
             }
-        }
-        
-        
-        for i in 0...weatherData.list.count-1 {
             
-            persistentContainer.performBackgroundTask { contexBackgroundWeather in
+            
+            //        for i in 0...weatherData.list.count-1 {
+            //
+            //            persistentContainer.performBackgroundTask { contexBackgroundWeather in
+            //
+            //                //                let weatherDataForGeneral = GeneralTable(context: contexBackgroundWeather)
+            //                ////                weatherDataForGeneral.cnt = Int16(weatherData.cnt)
+            //                ////                weatherDataForGeneral.listID = UUID().uuidString
+            //
+            //                let weatherDataForList = ListTable(context: contexBackgroundWeather)
+            //                // weatherDataForList.listID = weatherDataForGeneral.listID
+            //                weatherDataForList.mainID = UUID().uuidString
+            //                weatherDataForList.weatherID = UUID().uuidString
+            //                weatherDataForList.cloudsID = UUID().uuidString
+            //                weatherDataForList.windID = UUID().uuidString
+            //                weatherDataForList.dt = Int32(weatherData.list[i].dt)
+            //                weatherDataForList.pop = weatherData.list[i].pop
+            //                weatherDataForList.dt_txt = weatherData.list[i].dt_txt
+            //                weatherDataForList.cityID = weatherData.city.id
+            //
+            //                let weatherDataForMain = MainTable(context: contexBackgroundWeather)
+            //                weatherDataForMain.mainID = weatherDataForList.mainID
+            //                weatherDataForMain.temp = weatherData.list[i].main.temp
+            //                weatherDataForMain.feels_like = weatherData.list[i].main.feels_like
+            //                weatherDataForMain.temp_min = weatherData.list[i].main.temp_min
+            //                weatherDataForMain.temp_max = weatherData.list[i].main.temp_max
+            //                weatherDataForMain.pressure = weatherData.list[i].main.pressure
+            //                weatherDataForMain.humidity = weatherData.list[i].main.humidity
+            //
+            //                let weatherDataForWeather = WeatherTable(context: contexBackgroundWeather)
+            //                weatherDataForWeather.weatherID = weatherDataForList.weatherID
+            //                weatherDataForWeather.idOfCondition = Int16(weatherData.list[i].weather[0].id)
+            //                weatherDataForWeather.main = weatherData.list[i].weather[0].main
+            //                weatherDataForWeather.des = weatherData.list[i].weather[0].description
+            //                weatherDataForWeather.icon = weatherData.list[i].weather[0].icon
+            //
+            //                let weatherDataForClouds = CloudsTable(context: contexBackgroundWeather)
+            //                weatherDataForClouds.cloudsID = weatherDataForList.cloudsID
+            //                weatherDataForClouds.all = Int16(weatherData.list[i].clouds.all)
+            //
+            //                let weatherDataForWind = WindTable(context: contexBackgroundWeather)
+            //                weatherDataForWind.windID = weatherDataForList.windID
+            //                weatherDataForWind.speed = weatherData.list[i].wind.speed
+            //                weatherDataForWind.deg = Int16(weatherData.list[i].wind.deg)
+            //
+            //                try? contexBackgroundWeather.save()
+            //                DispatchQueue.main.async {
+            //                    self.reloadData()
+            //                }
+            //            }
+            //        }
+            //    }
+            
+            //    func makeNote(forWeatherData: Answer){
+            for i in 0...weatherData.list.count-1 {
                 
-                //                let weatherDataForGeneral = GeneralTable(context: contexBackgroundWeather)
-                ////                weatherDataForGeneral.cnt = Int16(weatherData.cnt)
-                ////                weatherDataForGeneral.listID = UUID().uuidString
-                
-                let weatherDataForList = ListTable(context: contexBackgroundWeather)
-                // weatherDataForList.listID = weatherDataForGeneral.listID
-                weatherDataForList.mainID = UUID().uuidString
-                weatherDataForList.weatherID = UUID().uuidString
-                weatherDataForList.cloudsID = UUID().uuidString
-                weatherDataForList.windID = UUID().uuidString
-                weatherDataForList.dt = Int32(weatherData.list[i].dt)
-                weatherDataForList.pop = weatherData.list[i].pop
-                weatherDataForList.dt_txt = weatherData.list[i].dt_txt
-                weatherDataForList.cityID = weatherData.city.id
-                
-                let weatherDataForMain = MainTable(context: contexBackgroundWeather)
-                weatherDataForMain.mainID = weatherDataForList.mainID
-                weatherDataForMain.temp = weatherData.list[i].main.temp
-                weatherDataForMain.feels_like = weatherData.list[i].main.feels_like
-                weatherDataForMain.temp_min = weatherData.list[i].main.temp_min
-                weatherDataForMain.temp_max = weatherData.list[i].main.temp_max
-                weatherDataForMain.pressure = weatherData.list[i].main.pressure
-                weatherDataForMain.humidity = weatherData.list[i].main.humidity
-                
-                let weatherDataForWeather = WeatherTable(context: contexBackgroundWeather)
-                weatherDataForWeather.weatherID = weatherDataForList.weatherID
-                weatherDataForWeather.idOfCondition = Int16(weatherData.list[i].weather[0].id)
-                weatherDataForWeather.main = weatherData.list[i].weather[0].main
-                weatherDataForWeather.des = weatherData.list[i].weather[0].description
-                weatherDataForWeather.icon = weatherData.list[i].weather[0].icon
-                
-                let weatherDataForClouds = CloudsTable(context: contexBackgroundWeather)
-                weatherDataForClouds.cloudsID = weatherDataForList.cloudsID
-                weatherDataForClouds.all = Int16(weatherData.list[i].clouds.all)
-                
-                let weatherDataForWind = WindTable(context: contexBackgroundWeather)
-                weatherDataForWind.windID = weatherDataForList.windID
-                weatherDataForWind.speed = weatherData.list[i].wind.speed
-                weatherDataForWind.deg = Int16(weatherData.list[i].wind.deg)
-                
-                try? contexBackgroundWeather.save()
-                DispatchQueue.main.async {
-                    self.reloadData()
-                }
-            }
-        }
+                self.persistentContainer.performBackgroundTask { contexBackgroundWeather in
+                    let weatherDataForAll = GeneralTable(context: contexBackgroundWeather)
+                    weatherDataForAll.cityName = weatherData.city.name
+                    weatherDataForAll.cityID = weatherData.city.id
+                    weatherDataForAll.dt = Int32(weatherData.list[i].dt)
+                    weatherDataForAll.pop = weatherData.list[i].pop
+                    weatherDataForAll.dt_text = weatherData.list[i].dt_txt
+                    
+                    weatherDataForAll.temp = weatherData.list[i].main.temp
+                    weatherDataForAll.feels_like = weatherData.list[i].main.feels_like
+                    weatherDataForAll.temp_min = weatherData.list[i].main.temp_min
+                    weatherDataForAll.temp_max = weatherData.list[i].main.temp_max
+                    weatherDataForAll.pressure = weatherData.list[i].main.pressure
+                    weatherDataForAll.humidity = weatherData.list[i].main.humidity
+                    
+                    weatherDataForAll.main = weatherData.list[i].weather[0].main
+                    weatherDataForAll.descW = weatherData.list[i].weather[0].description
+                    weatherDataForAll.icon = weatherData.list[i].weather[0].icon
+                    
+                    weatherDataForAll.all = Int16(weatherData.list[i].clouds.all)
+                    
+                    weatherDataForAll.speed = weatherData.list[i].wind.speed
+                    weatherDataForAll.deg = Int16(weatherData.list[i].wind.deg)
+                    
+                    try? contexBackgroundWeather.save()
+                    DispatchQueue.main.async {
+                        self.reloadData()
+                    }
+                }}}
     }
     
-    func deleteAllData(list: [ListTable], weather: [WeatherTable], main: [MainTable], wind: [WindTable], cloud: [CloudsTable]){
-        for i in 0...list.count-1 {
-            persistentContainer.viewContext.delete(list[i])
-            saveContext()
+    func deleteAllData(
+        //list: [ListTable], weather: [WeatherTable], main: [MainTable], wind: [WindTable], cloud: [CloudsTable],
+        general: [GeneralTable]){
+            //        for i in 0...list.count-1 {
+            //            persistentContainer.viewContext.delete(list[i])
+            //            saveContext()
+            //        }
+            //
+            //        for i in 0...weather.count-1 {
+            //            persistentContainer.viewContext.delete(weather[i])
+            //            saveContext()
+            //        }
+            //
+            //        for i in 0...main.count-1 {
+            //            persistentContainer.viewContext.delete(main[i])
+            //            saveContext()
+            //        }
+            //
+            //        for i in 0...wind.count-1 {
+            //            persistentContainer.viewContext.delete(wind[i])
+            //            saveContext()
+            //        }
+            //
+            //        for i in 0...cloud.count-1 {
+            //            persistentContainer.viewContext.delete(cloud[i])
+            //            saveContext()
+            //        }
+            
+            for i in 0...general.count-1 {
+                persistentContainer.viewContext.delete(general[i])
+                saveContext()
+            }
+            
         }
-        
-        for i in 0...weather.count-1 {
-            persistentContainer.viewContext.delete(weather[i])
-            saveContext()
-        }
-        
-        for i in 0...main.count-1 {
-            persistentContainer.viewContext.delete(main[i])
-            saveContext()
-        }
-        
-        for i in 0...wind.count-1 {
-            persistentContainer.viewContext.delete(wind[i])
-            saveContext()
-        }
-        
-        for i in 0...cloud.count-1 {
-            persistentContainer.viewContext.delete(cloud[i])
-            saveContext()
-        }
-    }
     
     
     // MARK: - Core Data Saving support
@@ -253,6 +391,7 @@ class CoreDataManager {
         if context.hasChanges {
             do {
                 try context.save()
+                context.automaticallyMergesChangesFromParent = true
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")

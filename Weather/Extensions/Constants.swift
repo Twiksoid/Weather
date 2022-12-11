@@ -39,6 +39,7 @@ enum Constants {
     static let alarmTownText = "Укажите страну и город"
     static let alarmTownOk = "Добавить"
     static let alarmTownCansel = "Отменить"
+    static let defaultTownName = "Добавьте город"
     
 }
 
@@ -64,7 +65,9 @@ let textData: TextData = .init(dataWeather: "17/04",
                                descriptionWeather: "Преимущественно облачно",
                                degreesseData: "4º-11º")
 
-let allWeatherData1: AllWeatherData = .init(minMaxWeather: "7º/13º",
+let allWeatherData1: AllWeatherData = .init(cityID: 35334,
+                                            cityName: "Moscow",
+                                            minMaxWeather: "7º/13º",
                                             currentWeatherValue: "13º",
                                             descriptionWeather: "Возможен дождь",
                                             timeRise: "05:41",
@@ -85,7 +88,9 @@ let allWeatherData1: AllWeatherData = .init(minMaxWeather: "7º/13º",
                                             extraTextWeather: "Преимущественно облачно",
                                             degreesseData: "4º-11º")
 
-let allWeatherData2: AllWeatherData = .init(minMaxWeather: "1º/3º",
+let allWeatherData2: AllWeatherData = .init(cityID: 354354,
+                                            cityName: "Moscow",
+                                            minMaxWeather: "1º/3º",
                                             currentWeatherValue: "3º",
                                             descriptionWeather: "Возможен снег",
                                             timeRise: "05:49",

@@ -37,6 +37,8 @@ struct TextData {
 }
 
 struct AllWeatherData {
+    var cityID: Int32
+    var cityName: String
     var minMaxWeather: String
     var currentWeatherValue: String
     var descriptionWeather: String

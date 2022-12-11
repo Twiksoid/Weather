@@ -20,6 +20,12 @@ struct City: Decodable {
     var country: String
     var sunrise: Int32
     var sunset: Int32
+    var coord: Coord
+}
+// Координаты города
+struct Coord: Decodable {
+    var lat: Double
+    var lon: Double
 }
 
 // Вложения Листа

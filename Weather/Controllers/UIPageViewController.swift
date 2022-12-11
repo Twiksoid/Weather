@@ -10,7 +10,7 @@ import CoreData
 import CoreLocation
 
 class PageViewController: UIPageViewController {
-
+    
     var addressOfCity: String?
     var latitude: CLLocationDegrees?
     var longitude: CLLocationDegrees?
@@ -23,38 +23,36 @@ class PageViewController: UIPageViewController {
         navigationController?.navigationBar.backgroundColor = .white
     }
     
-    func getDataForCities(){
-    // После этого нужно загрузить новые данные для этих городов
-    let cities = CoreDataManager.shared.city
-    if cities.count > 0 {
-        for i in 0...cities.count-1 {
-            print("текущий город - ",cities[i].name!)
-            LocationManager.shared.forwardGeocoding(address: cities[i].name!) { [self] coordinates in
-                print("Объект в результате декодинга Имени города - ", coordinates)
-                self.latitude = coordinates.latitude
-                self.longitude = coordinates.longitude
-                if (self.latitude != nil) && (self.longitude != nil) {
-                    getDataLocationFor(lat: self.latitude!, lot: self.longitude!)
-                } else {
-                print("город не распознали, данные не загрузили")}
-            }}
-    }}
+    //    func getDataForCities(){
+    //    // После этого нужно загрузить новые данные для этих городов
+    //    let cities = CoreDataManager.shared.city
+    //    if cities.count > 0 {
+    //        for i in 0...cities.count-1 {
+    //            print("текущий город - ",cities[i].name!)
+    //            latitude = cities[i].lat
+    //            longitude = cities[i].lon
+    //            
+    //            if (self.latitude != nil) && (self.longitude != nil) {
+    //                    getDataLocationFor(lat: self.latitude!, lot: self.longitude!)
+    //                } else {
+    //                print("город не распознали, данные не загрузили")}
+    //            }
+    //    }}
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getDataForCities()
         // нужно сходить в сеть
         // для каждого города в таблице
         // загрузить данные
         // положить данные в виде объекта в массив
         // вызвать пейжвьюконтроллер
-        setupView()
         setVCForPage()
-        }
-     private func setVCForPage(){
-          arrayOfWeatherData.append(allWeatherData1)
-  //        arrayOfWeatherData.append(allWeatherData2)
-              setViewControllers([arrayOfWVC[0]], direction: .forward, animated: true)
+        setupView()
+    }
+    
+    private func setVCForPage(){
+        arrayOfWeatherData = CoreDataManager.shared.getDataForCities()
+        setViewControllers([arrayOfWVC[0]], direction: .forward, animated: true)
     }
     
     private func setupView(){
@@ -75,18 +73,25 @@ class PageViewController: UIPageViewController {
         if CoreDataManager.shared.city.count == 0 {
             weatherVCs.append(WeatherDataController(isInit: true))
         } else {
+            var i = 0
             for vc in arrayOfWeatherData {
-                CoreDataManager.shared.getDataForCities()
-                weatherVCs.append(WeatherDataController(allweatherData: vc))
+                if i >= CoreDataManager.shared.city.count { break
+                } else {
+                    i += 1
+                    weatherVCs.append(WeatherDataController(allweatherData: vc))
+                }
             }}
-            return weatherVCs
-        }()
+        return weatherVCs
+    }()
     
     private func setupNavigationBar(){
-          navigationItem.title = "Test weather data"
-          navigationController?.navigationBar.backgroundColor = .systemBackground
-          navigationController?.navigationBar.prefersLargeTitles = false
-          
+        if arrayOfWeatherData.count == 0 {
+            navigationItem.title = Constants.defaultTownName
+        } else {
+            navigationItem.title = arrayOfWeatherData[0].cityName}
+        navigationController?.navigationBar.backgroundColor = .systemBackground
+        navigationController?.navigationBar.prefersLargeTitles = false
+        
         // создаю новый объект в верхнем баре
         let settings = UIBarButtonItem(image: UIImage(systemName: "server.rack"),
                                        style: .plain,
@@ -96,11 +101,11 @@ class PageViewController: UIPageViewController {
                                       style: .plain,
                                       target: self,
                                       action: #selector(newTownTapped))
-          
-          // добавляю его в доступные к выводу справа и слева
-          navigationItem.rightBarButtonItems = [newTown]
-          navigationItem.leftBarButtonItems = [settings]
-      }
+        
+        // добавляю его в доступные к выводу справа и слева
+        navigationItem.rightBarButtonItems = [newTown]
+        navigationItem.leftBarButtonItems = [settings]
+    }
     
     @objc private func settingsTapped() {
         navigationController?.pushViewController(SettingsController(), animated: true)
@@ -137,15 +142,6 @@ class PageViewController: UIPageViewController {
         NetworkManager().downloadData(urlString: urlForCertainTown) { answer in
             if answer != nil {
                 CoreDataManager.shared.saveNewWeatherDatas(weatherData: answer!)
-                
-                DispatchQueue.main.async {
-                    let wDC = WeatherDataController()
-                    wDC.pageMainSceneDelegate = self
-                    print(self.arrayOfWeatherData, self.arrayOfWVC)
-                    wDC.viewDidLoad()
-//                    self.imagePlusButton.isHidden = true
-                }
-                
             } else {
                 print("нил вернулся вместо ответа")
             }
@@ -179,13 +175,21 @@ extension PageViewController: UIPageViewControllerDataSource, UIPageViewControll
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if let vc  = viewController as? WeatherDataController {
             if let indexOfVC = arrayOfWVC.firstIndex(of: vc) {
-                if indexOfVC < arrayOfWeatherData.count - 1 { return arrayOfWVC[indexOfVC + 1] }
+                if indexOfVC < arrayOfWVC.count - 1 {
+                    print("changed PageViewController")
+                    
+                    DispatchQueue.main.async {
+                        print(self.arrayOfWeatherData[indexOfVC].cityName)
+                        self.navigationController?.title = self.arrayOfWeatherData[indexOfVC].cityName
+                    }
+                    return arrayOfWVC[indexOfVC + 1]
+                }
             }} else { return nil}
         return nil
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        arrayOfWeatherData.count
+        arrayOfWVC.count
     }
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         0
