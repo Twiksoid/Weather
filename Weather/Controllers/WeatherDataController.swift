@@ -112,7 +112,7 @@ class WeatherDataController: UIViewController {
                 imagePlusButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 imagePlusButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)])
         } else {
-            getDataForCurrentLocation()
+          //  getDataForCurrentLocation()
         }
         
         setupView()

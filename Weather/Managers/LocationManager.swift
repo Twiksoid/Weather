@@ -28,7 +28,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             manager.stopUpdatingLocation()
         }
     }
-    
+
     func forwardGeocoding(address: String, completion: @escaping ((CLLocationCoordinate2D) -> Void)) {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address, completionHandler: { (placemarks, error) in
@@ -58,7 +58,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func reverseGeocoding(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: latitude, longitude: longitude)
-        geocoder.reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+        geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
             if error != nil {
                 print("Failed to retrieve address")
                 return

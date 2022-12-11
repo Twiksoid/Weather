@@ -6,47 +6,53 @@
 //
 
 import UIKit
+import CoreLocation
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    
+    var latitude: CLLocationDegrees?
+    var longitude: CLLocationDegrees?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-//
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        var viewControllerForShowing: UIViewController
-//
-//        if (UserDefaults.standard.value(forKey: "onboarding") as? String) == nil {
-//            viewControllerForShowing = PermissionLocationController()
-//            // storyboard.instantiateViewController(withIdentifier: "onboardingStoryboard")
-//        } else {
-//            viewControllerForShowing = InitViewController()
-//            // storyboard.instantiateViewController(withIdentifier: "navigationVCSID")
-//
-//           // PageViewController()
-//            // storyboard.instantiateInitialViewController()!
-//        }
-//
-//       // self.window?.rootViewController = viewControllerForShowing
-//        self.window?.rootViewController = InitViewController()
-//        //  self.window?.rootViewController = PageViewController()
-//        self.window?.makeKeyAndVisible()
-//
-     
+        //
+        //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //        var viewControllerForShowing: UIViewController
+        //
+        //        if (UserDefaults.standard.value(forKey: "onboarding") as? String) == nil {
+        //            viewControllerForShowing = PermissionLocationController()
+        //            // storyboard.instantiateViewController(withIdentifier: "onboardingStoryboard")
+        //        } else {
+        //            viewControllerForShowing = InitViewController()
+        //            // storyboard.instantiateViewController(withIdentifier: "navigationVCSID")
+        //
+        //           // PageViewController()
+        //            // storyboard.instantiateInitialViewController()!
+        //        }
+        //
+        //       // self.window?.rootViewController = viewControllerForShowing
+        //        self.window?.rootViewController = InitViewController()
+        //        //  self.window?.rootViewController = PageViewController()
+        //        self.window?.makeKeyAndVisible()
+        //
+        
         self.window?.rootViewController = InitViewController()
-                self.window?.makeKeyAndVisible()
+        self.window?.makeKeyAndVisible()
         
         
         if CoreDataManager.shared.settings.count == 0 {
             // значит, первый запуск, нужно положить данные с базовыми настройками
             // базовые настройки сам придумал под РФ
-            CoreDataManager.shared.createSettings(temp: Int16(0), speed: Int16(1), hours: Int16(1), notifications: Int16(1))} else {
-                print("Настройки уже есть, ничего не пишем")
-            }
+            CoreDataManager.shared.createSettings(temp: Int16(0),
+                                                  speed: Int16(1),
+                                                  hours: Int16(1),
+                                                  notifications: Int16(1))
+        } else {
+            print("Настройки уже есть, ничего не пишем")
+        }
         
         // хитрость в том, что нужны актуальные данные на момент запуска приложения
         // это значит, что хранить постоянно данные нет смысла
@@ -68,10 +74,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                                  wind: wind,
                                                  cloud: cloud)
         }
-        
-        // путь папки на устройстве -
-        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
-    }
+            // путь папки на устройстве -
+            print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+        }
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

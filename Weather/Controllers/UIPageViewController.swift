@@ -10,7 +10,7 @@ import CoreData
 import CoreLocation
 
 class PageViewController: UIPageViewController {
-    
+
     var addressOfCity: String?
     var latitude: CLLocationDegrees?
     var longitude: CLLocationDegrees?
@@ -23,13 +23,39 @@ class PageViewController: UIPageViewController {
         navigationController?.navigationBar.backgroundColor = .white
     }
     
+    func getDataForCities(){
+    // После этого нужно загрузить новые данные для этих городов
+    let cities = CoreDataManager.shared.city
+    if cities.count > 0 {
+        for i in 0...cities.count-1 {
+            print("текущий город - ",cities[i].name!)
+            LocationManager.shared.forwardGeocoding(address: cities[i].name!) { [self] coordinates in
+                print("Объект в результате декодинга Имени города - ", coordinates)
+                self.latitude = coordinates.latitude
+                self.longitude = coordinates.longitude
+                if (self.latitude != nil) && (self.longitude != nil) {
+                    getDataLocationFor(lat: self.latitude!, lot: self.longitude!)
+                } else {
+                print("город не распознали, данные не загрузили")}
+            }}
+    }}
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        getDataForCities()
+        // нужно сходить в сеть
+        // для каждого города в таблице
+        // загрузить данные
+        // положить данные в виде объекта в массив
+        // вызвать пейжвьюконтроллер
         setupView()
-//        arrayOfWeatherData.append(allWeatherData1)
-//        arrayOfWeatherData.append(allWeatherData2)
-            setViewControllers([arrayOfWVC[0]], direction: .forward, animated: true)
+        setVCForPage()
         }
+     private func setVCForPage(){
+          arrayOfWeatherData.append(allWeatherData1)
+  //        arrayOfWeatherData.append(allWeatherData2)
+              setViewControllers([arrayOfWVC[0]], direction: .forward, animated: true)
+    }
     
     private func setupView(){
         setupNavigationBar()
@@ -50,6 +76,7 @@ class PageViewController: UIPageViewController {
             weatherVCs.append(WeatherDataController(isInit: true))
         } else {
             for vc in arrayOfWeatherData {
+                CoreDataManager.shared.getDataForCities()
                 weatherVCs.append(WeatherDataController(allweatherData: vc))
             }}
             return weatherVCs

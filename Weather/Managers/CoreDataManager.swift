@@ -25,10 +25,14 @@ class CoreDataManager {
     var city = [CityTable]()
     //var data: [AllWeatherData?]
     
-    func reloadData(){
+    func checkSettings(){
         let request = Settings.fetchRequest()
         let setting = (try? persistentContainer.viewContext.fetch(request)) ?? []
         self.settings = setting
+    }
+    
+    func reloadData(){
+        checkSettings()
     }
     
     func getFavoriteCities(){
@@ -37,29 +41,25 @@ class CoreDataManager {
         self.city = cities ?? []
     }
     
-//    func getDataForCities(){
-//        getFavoriteCities()
-//        
-//        for i in 0...city.count-1 {
-//           let cityID = city[i].id
-//            
-//            let request = ListTable.fetchRequest()
-//            request.predicate = NSPredicate(format: "cityID = %@", cityID)
-//            let list = (try? persistentContainer.viewContext.fetch(request)) ?? []
-//            
-//            for i in 0...list.count-1 {
-//                
-//            }
-//            
-//            if list.contains(where: {$0.cityID == cityID}) {
-//                
-//                let weatherForCity: AllWeatherData = .init(minMaxWeather:  , currentWeatherValue: <#T##String#>, descriptionWeather: <#T##String#>, timeRise: <#T##String#>, timeSunset: <#T##String#>, generalWeatherInfo: <#T##String#>, imageVisible: <#T##UIImage#>, valueVisible: <#T##String#>, imageRain: <#T##UIImage#>, valueRain: <#T##String#>, imageWind: <#T##UIImage#>, valueWind: <#T##String#>, textTimeWeather: <#T##String#>, imageCollectionView: <#T##UIImage#>, textWeather: <#T##String#>, dataWeather: <#T##String#>, imageWeather: <#T##UIImage#>, vetPercent: <#T##String#>, extraTextWeather: <#T##String#>, degreesseData: <#T##String#>)
-//            }
-//        }
-//        
-//        data.append(<#T##newElement: AllWeatherData?##AllWeatherData?#>)
-//        
-//    }
+    func getDataForCities(){
+        getFavoriteCities()
+        
+        if city.count > 0 {
+            for i in 0...city.count-1 {
+                let cityID = city[i].id
+                
+                let request = ListTable.fetchRequest()
+                let predicateCityID = NSPredicate(format: "cityID = %@", String(cityID))
+                let currentTime = Int32(Date().timeIntervalSince1970)
+                let predicateCityTime = NSPredicate(format: "dt > %@", String(currentTime))
+                let allPredicates = NSCompoundPredicate(type: .and, subpredicates: [predicateCityID, predicateCityTime])
+                  request.predicate = allPredicates
+                
+                let list = (try? persistentContainer.viewContext.fetch(request)) ?? []
+                print("Количество записей в листе - ", list.count)
+                print(currentTime)
+                
+            }}}
     
     // проверим наличие данных в таблицах
     func checkData(){
