@@ -41,9 +41,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // можно проверить по одной таблице тк остальные связанные к ней
         // таблицу городов не проверяем тк там храним как раз все нужные города
         // что уже добавил пользователь
-        CoreDataManager.shared.checkData()
+        //CoreDataManager.shared.checkData()
         if CoreDataManager.shared.general.count > 0 {
-            CoreDataManager.shared.deleteAllData(general: CoreDataManager.shared.general)
+            let generalData = CoreDataManager.shared.general
+            CoreDataManager.shared.deleteAllData(general: generalData)
         }
         
         // путь папки на устройстве -

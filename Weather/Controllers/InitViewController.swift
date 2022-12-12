@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 
 // ключ для нотификатора
-let notificationKeyForNetUpdate = Constants.notificationKeyForNetUpdate
+let notificationKeyForNetUpdate = "getNetWeatherData"
 
 class InitViewController: UINavigationController {
     

@@ -125,29 +125,29 @@ class CoreDataManager {
     
     // проверим наличие данных в таблицах
     func checkData(){
-        let requestForList = ListTable.fetchRequest()
-        let list = (try? persistentContainer.viewContext.fetch(requestForList))
-        self.list = list ?? []
-        
-        let requestForCloud = CloudsTable.fetchRequest()
-        let cloud = (try? persistentContainer.viewContext.fetch(requestForCloud))
-        self.cloud = cloud ?? []
-        
-        let requestForMain = MainTable.fetchRequest()
-        let main = (try? persistentContainer.viewContext.fetch(requestForMain))
-        self.main = main ?? []
-        
-        let requestForWeather = WeatherTable.fetchRequest()
-        let weather = (try? persistentContainer.viewContext.fetch(requestForWeather))
-        self.weather = weather ?? []
-        
-        let requestForWind = WindTable.fetchRequest()
-        let wind = (try? persistentContainer.viewContext.fetch(requestForWind))
-        self.wind = wind ?? []
-        
-        let requestForCity = CityTable.fetchRequest()
-        let city = (try? persistentContainer.viewContext.fetch(requestForCity))
-        self.city = city ?? []
+//        let requestForList = ListTable.fetchRequest()
+//        let list = (try? persistentContainer.viewContext.fetch(requestForList))
+//        self.list = list ?? []
+//        
+//        let requestForCloud = CloudsTable.fetchRequest()
+//        let cloud = (try? persistentContainer.viewContext.fetch(requestForCloud))
+//        self.cloud = cloud ?? []
+//        
+//        let requestForMain = MainTable.fetchRequest()
+//        let main = (try? persistentContainer.viewContext.fetch(requestForMain))
+//        self.main = main ?? []
+//        
+//        let requestForWeather = WeatherTable.fetchRequest()
+//        let weather = (try? persistentContainer.viewContext.fetch(requestForWeather))
+//        self.weather = weather ?? []
+//        
+//        let requestForWind = WindTable.fetchRequest()
+//        let wind = (try? persistentContainer.viewContext.fetch(requestForWind))
+//        self.wind = wind ?? []
+//
+//        let requestForCity = CityTable.fetchRequest()
+//        let city = (try? persistentContainer.viewContext.fetch(requestForCity))
+//        self.city = city ?? []
         
         let requestForGeneral = GeneralTable.fetchRequest()
         let general = (try? persistentContainer.viewContext.fetch(requestForGeneral))
