@@ -16,6 +16,7 @@ class PageViewController: UIPageViewController {
     var longitude: CLLocationDegrees?
     
     var arrayOfWeatherData = [AllWeatherData]()
+//    var miniWeatherData = [MiniData]()
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.barTintColor = .white
@@ -32,6 +33,8 @@ class PageViewController: UIPageViewController {
         // вызвать пейжвьюконтроллер
         setVCForPage()
         setupView()
+        //miniWeatherData = createMiniData()
+        //print("Данные для миниатюры погоды", miniWeatherData)
     }
     
     private func setVCForPage(){
@@ -48,7 +51,11 @@ class PageViewController: UIPageViewController {
         let pageControl = UIPageControl.appearance()
         pageControl.pageIndicatorTintColor = .gray
         pageControl.currentPageIndicatorTintColor = .black
-        pageControl.direction = .natural
+        if #available(iOS 16.0, *) {
+            pageControl.direction = .natural
+        } else {
+            
+        }
         pageControl.backgroundStyle = .prominent
     }
     
@@ -57,16 +64,48 @@ class PageViewController: UIPageViewController {
         if CoreDataManager.shared.city.count == 0 {
             weatherVCs.append(WeatherDataController(isInit: true))
         } else {
+            var counts: [Int32: Int] = [:]
+            
+            var citiesIDArrayForCompair = [Int32]()
+            
             var i = 0
             for vc in arrayOfWeatherData {
                 if i >= CoreDataManager.shared.city.count { break
                 } else {
-                    i += 1
-                    weatherVCs.append(WeatherDataController(allweatherData: vc))
+                    // выводим 1 город = 1 вью
+                    if citiesIDArrayForCompair.contains(where: { $0 == vc.cityID }) { continue } else {
+                        i += 1
+                        citiesIDArrayForCompair.append(vc.cityID)
+                        weatherVCs.append(WeatherDataController(allweatherData: vc))
+                    }
                 }
             }}
         return weatherVCs
     }()
+    
+//    private func createMiniData() -> [MiniData]{
+//        var cities = [Int32]()
+//        for cityID in CoreDataManager.shared.city {
+//            cities.append(cityID.id)
+//        }
+//        
+//        // массив данных для миниатюр
+//        var miniDates = [MiniData]()
+//        
+//        for i in 0...cities.count-1 {
+//            for y in 0...arrayOfWeatherData.count-1 {
+//                if arrayOfWeatherData[y].cityID == cities[i] {
+//                    let mini: MiniData = .init(
+//                        textTimeWeather: arrayOfWeatherData[y].textTimeWeather,
+//                        imageCollectionView: arrayOfWeatherData[y].imageCollectionView,
+//                        textWeather: arrayOfWeatherData[y].textWeather)
+//                    miniDates.append(mini)
+//                }
+//            }}
+//        return miniDates
+//    }
+            
+            
     
     private func setupNavigationBar(){
         if arrayOfWeatherData.count == 0 {

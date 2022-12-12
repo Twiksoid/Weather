@@ -35,10 +35,10 @@ class WeatherDataController: UIViewController {
     
     @objc private func imageTapped(){
 
-        let alert = UIAlertController(title: "Внимание!",
-                                      message: "Для добавления города, нажмите в правом верхнем углу",
+        let alert = UIAlertController(title: Constants.alarmAddTownTitle,
+                                      message: Constants.alarmAddTownText,
                                       preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Понятно",
+        let okAction = UIAlertAction(title: Constants.alarmAddTownOk,
                                      style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)

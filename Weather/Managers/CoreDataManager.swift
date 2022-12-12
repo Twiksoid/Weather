@@ -82,8 +82,8 @@ class CoreDataManager {
                         minMaxWeather: "\(String(Int(generalWeatherData[i].temp_min)))º / \(String(Int(generalWeatherData[i].temp_max)))º" ,
                         currentWeatherValue: String(Int(generalWeatherData[i].temp)) + "º",
                         descriptionWeather: String(generalWeatherData[i].descW ?? ""),
-                        timeRise: getTime(forValue: cityObject.sunset),
-                        timeSunset: getTime(forValue: cityObject.sunrise),
+                        timeRise: getTime(forValue: cityObject.sunrise),
+                        timeSunset: getTime(forValue: cityObject.sunset),
                         generalWeatherInfo: currentDateTime,
                         imageVisible: UIImage(systemName: "smoke")!,
                         valueVisible: String(Int(generalWeatherData[i].pop)) + "%",
@@ -221,7 +221,8 @@ class CoreDataManager {
                     
                     try? contexBackgroundWeather.save()
                     DispatchQueue.main.async {
-                        self.reloadData()
+                      //  self.reloadData()
+                        self.checkData()
                     }
                 }
             }
@@ -254,9 +255,13 @@ class CoreDataManager {
                     
                     try? contexBackgroundWeather.save()
                     DispatchQueue.main.async {
-                        self.reloadData()
+                        //self.reloadData()
+                        self.checkData()
                     }
                 }}}
+        
+        // слушатель должен обновить данные
+        NotificationCenter.default.post(name: Notification.Name(rawValue: notificationKeyForNetUpdate), object: self)
     }
     
     func deleteAllData(general: [GeneralTable]){

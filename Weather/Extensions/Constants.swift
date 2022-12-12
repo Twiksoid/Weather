@@ -10,7 +10,7 @@ import UIKit
 enum APIData {
     static  let apiKey = "21e407b6a635ca68d252e0d177d3b9cf"
     static let urlHTTPS = "https://api.openweathermap.org/data/2.5/forecast?"
-    static let cnt = 40
+    static let cnt = 8
     static let lang = "ru"
     static  let urlAPI = "http://api.api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&cnt={40}&appid={API key}&units={Unit}&lang={ru}"
     
@@ -40,7 +40,12 @@ enum Constants {
     static let alarmTownOk = "Добавить"
     static let alarmTownCansel = "Отменить"
     static let defaultTownName = "Добавьте город"
+    static let alarmAddTownTitle = "Внимание!"
+    static let alarmAddTownText = "Для добавления города, нажмите в правом верхнем углу"
+    static let alarmAddTownOk = "Понятно"
+    static let textWhileLoadingInit = "Загрузка данных, подождите ..."
     
+    static let notificationKeyForNetUpdate = "getNetWeatherData"
 }
 
 let headerData: HeaderData = .init(minMaxWeather: "7º/13º",
